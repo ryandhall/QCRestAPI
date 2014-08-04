@@ -65,7 +65,7 @@ namespace QuantConnect.RestAPI
             client.AddDefaultHeader("Authorization", "Basic " + _accessToken);
 
             //Wait for the API rate limiting
-            while (DateTime.Now < (_previousRequest + _rateLimit)) Thread.Sleep(10);
+            while (DateTime.Now < (_previousRequest + _rateLimit)) Thread.Sleep(1);
             _previousRequest = DateTime.Now;
 
             //Send the request:
