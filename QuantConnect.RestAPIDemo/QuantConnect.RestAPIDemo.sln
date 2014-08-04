@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.RestAPIDemo", "QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo.csproj", "{3FF90CE2-AE71-416E-BF74-451E97D76E7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.RestAPI", "..\QuantConnect.RestAPI\QuantConnect.RestAPI.csproj", "{70D2CC00-502F-49D2-AFFF-D65472DE87D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Mono|Any CPU = Mono|Any CPU
+		Mono|x64 = Mono|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Mono|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Mono|Any CPU.Build.0 = Release|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Mono|x64.ActiveCfg = Release|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FF90CE2-AE71-416E-BF74-451E97D76E7E}.Release|x64.ActiveCfg = Release|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Mono|Any CPU.ActiveCfg = Release|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Mono|Any CPU.Build.0 = Release|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Mono|x64.ActiveCfg = Release|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Release|x64.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

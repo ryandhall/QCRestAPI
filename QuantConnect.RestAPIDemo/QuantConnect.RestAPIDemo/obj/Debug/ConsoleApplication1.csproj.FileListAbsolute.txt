@@ -1,0 +1,12 @@
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\QuantConnect.RestAPI.dll
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\RestSharp.dll
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\Newtonsoft.Json.dll
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\QuantConnect.RestAPI.pdb
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\RestSharp.xml
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\bin\Debug\Newtonsoft.Json.xml
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Server\www\QCo\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
