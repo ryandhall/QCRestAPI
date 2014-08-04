@@ -48,6 +48,8 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Initialise API Manager:
         /// </summary>
+        /// <param name="email">QuantConnect user email</param>
+        /// <param name="password">QuantConnect user password</param>
         public API(string email, string password)
         {
             Authenticate(email, password);
@@ -84,8 +86,8 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Test these authentication details against the server:
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="email">User email from quantconnect account</param>
+        /// <param name="password">Quantconnect user password</param>
         public bool Authenticate(string email, string password)
         {
             bool loggedIn = false;
@@ -132,6 +134,8 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Update a project with a list of C# files:
         /// </summary>
+        /// <param name="id">Project Id</param>
+        /// <param name="filesData">List of files data and names</param>
         public bool ProjectUpdate(int id, List<File> filesData)
         {
             bool success = false;
@@ -153,7 +157,7 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Return a list of QuantConnect Projects
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of QuantConnect Project objects</returns>
         public List<Project> ProjectList()
         {
             List<Project> projects = new List<Project>();
@@ -174,6 +178,8 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Get a list of project files in this project
         /// </summary>
+        /// <param name="id">ProjectID</param>
+        /// <returns>List of QuantConnect File objects</returns>
         public List<File> ProjectFiles(int id)
         {
             List<File> files = new List<File>();
@@ -199,6 +205,7 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Delete a project by id:
         /// </summary>
+        /// <param name="id">Project Id</param>
         public bool ProjectDelete(int id)
         {
             bool success = false;
@@ -220,6 +227,7 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Send a compile request:
         /// </summary>
+        /// <param name="id">Compile ID</param>
         public PacketCompile Compile(int id)
         {
             PacketCompile packet = new PacketCompile();
@@ -240,6 +248,9 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Submit a compile and project id for backtesting.
         /// </summary>
+        /// <param name="projectId">Project Id for QuantConnect</param>
+        /// <param name="compileId">Successful compile id</param>
+        /// <param name="backtestName">Name for your backtest</param>
         public PacketBacktest Backtest(int projectId, string compileId, string backtestName)
         {
             PacketBacktest packet = new PacketBacktest();
@@ -260,6 +271,7 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Read this simulation result back:
         /// </summary>
+        /// <param name="simulationId">SimulationId we own</param>
         public PacketBacktestResult BacktestResults(string simulationId)
         {
             PacketBacktestResult packet = new PacketBacktestResult();
@@ -280,8 +292,6 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// B64 Encoder 
         /// </summary>
-        /// <param name="plainText"></param>
-        /// <returns></returns>
         private string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
