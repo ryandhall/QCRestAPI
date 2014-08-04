@@ -99,7 +99,7 @@ namespace QuantConnect.RestAPI
             var request = new RestRequest("projects/read", Method.POST);
             var response = Execute<PacketProject>(request);
 
-            if (response.Errors.Count == 0)
+            if (response.Errors == null || response.Errors.Count == 0)
             {
                 return true;
             }
