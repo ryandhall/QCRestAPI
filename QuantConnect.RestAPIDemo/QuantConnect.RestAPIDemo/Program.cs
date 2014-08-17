@@ -25,7 +25,7 @@ namespace QuantConnect.RestAPIDemo
         static void Main(string[] args)
         {
             // Init the new API:
-            API api = new API("your qc email account", "your password");
+            API api = new API("demo@quantconnect.com", "demo123");
 
             Console.WriteLine("==========================================");
             Console.WriteLine("Test 1: Create Project: ");
@@ -69,11 +69,11 @@ namespace QuantConnect.RestAPIDemo
             Console.WriteLine("==========================================");
             Console.WriteLine("Test 6: Backtest Compiled Project:");
             PacketBacktest backtestResult = api.Backtest(newProjectId, compileResult.CompileId, "New Random Name!");
-            Console.WriteLine("SimulationId: " + backtestResult.SimulationId);
+            Console.WriteLine("SimulationId: " + backtestResult.BacktestId);
 
             Console.WriteLine("==========================================");
             Console.WriteLine("Test 7: Reading Backtest Results:");
-            PacketBacktestResult readResult = api.BacktestResults(backtestResult.SimulationId);
+            PacketBacktestResult readResult = api.BacktestResults(backtestResult.BacktestId);
             foreach (Chart chart in readResult.Results.Charts.Values)
             {
                 Console.WriteLine("Result Chart Name: " + chart.Name);

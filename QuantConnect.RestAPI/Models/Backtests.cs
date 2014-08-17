@@ -21,8 +21,8 @@ namespace QuantConnect.RestAPI.Models
     /// </summary>
     public class PacketBacktest : PacketBase
     {
-        [JsonProperty(PropertyName = "simulationId")]
-        public string SimulationId;
+        [JsonProperty(PropertyName = "backtestId")]
+        public string BacktestId;
 
         public PacketBacktest()
         { }

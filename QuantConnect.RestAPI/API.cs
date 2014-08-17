@@ -48,8 +48,6 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Initialise API Manager:
         /// </summary>
-        /// <param name="email">QuantConnect user email</param>
-        /// <param name="password">QuantConnect user password</param>
         public API(string email, string password)
         {
             Authenticate(email, password);
@@ -67,7 +65,7 @@ namespace QuantConnect.RestAPI
             client.AddDefaultHeader("Authorization", "Basic " + _accessToken);
 
             //Wait for the API rate limiting
-            while (DateTime.Now < (_previousRequest + _rateLimit)) Thread.Sleep(1);
+            while (DateTime.Now < (_previousRequest + _rateLimit)) Thread.Sleep(10);
             _previousRequest = DateTime.Now;
 
             //Send the request:
@@ -86,25 +84,13 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Test these authentication details against the server:
         /// </summary>
-        /// <param name="email">User email from quantconnect account</param>
-        /// <param name="password">Quantconnect user password</param>
-        public bool Authenticate(string email, string password)
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        public void Authenticate(string email, string password)
         {
-            bool loggedIn = false;
-
             _email = email;
             _password = password;
             _accessToken = Base64Encode(email + ":" + password);
-
-            var request = new RestRequest("projects/read", Method.POST);
-            var response = Execute<PacketProject>(request);
-
-            if (response.Errors == null || response.Errors.Count == 0)
-            {
-                return true;
-            }
-
-            return loggedIn;
         }
 
         /// <summary>
@@ -134,8 +120,6 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Update a project with a list of C# files:
         /// </summary>
-        /// <param name="id">Project Id</param>
-        /// <param name="filesData">List of files data and names</param>
         public bool ProjectUpdate(int id, List<File> filesData)
         {
             bool success = false;
@@ -157,7 +141,7 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Return a list of QuantConnect Projects
         /// </summary>
-        /// <returns>List of QuantConnect Project objects</returns>
+        /// <returns></returns>
         public List<Project> ProjectList()
         {
             List<Project> projects = new List<Project>();
@@ -178,8 +162,6 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Get a list of project files in this project
         /// </summary>
-        /// <param name="id">ProjectID</param>
-        /// <returns>List of QuantConnect File objects</returns>
         public List<File> ProjectFiles(int id)
         {
             List<File> files = new List<File>();
@@ -205,7 +187,6 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Delete a project by id:
         /// </summary>
-        /// <param name="id">Project Id</param>
         public bool ProjectDelete(int id)
         {
             bool success = false;
@@ -227,7 +208,6 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Send a compile request:
         /// </summary>
-        /// <param name="id">Compile ID</param>
         public PacketCompile Compile(int id)
         {
             PacketCompile packet = new PacketCompile();
@@ -248,9 +228,6 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Submit a compile and project id for backtesting.
         /// </summary>
-        /// <param name="projectId">Project Id for QuantConnect</param>
-        /// <param name="compileId">Successful compile id</param>
-        /// <param name="backtestName">Name for your backtest</param>
         public PacketBacktest Backtest(int projectId, string compileId, string backtestName)
         {
             PacketBacktest packet = new PacketBacktest();
@@ -269,16 +246,15 @@ namespace QuantConnect.RestAPI
 
 
         /// <summary>
-        /// Read this simulation result back:
+        /// Read this backtest result back:
         /// </summary>
-        /// <param name="simulationId">SimulationId we own</param>
-        public PacketBacktestResult BacktestResults(string simulationId)
+        public PacketBacktestResult BacktestResults(string backtestId)
         {
             PacketBacktestResult packet = new PacketBacktestResult();
             try
             {
                 var request = new RestRequest("backtests/read", Method.POST);
-                request.AddParameter("application/json", JsonConvert.SerializeObject(new { simulationId = simulationId }), ParameterType.RequestBody);
+                request.AddParameter("application/json", JsonConvert.SerializeObject(new { backtestId = backtestId }), ParameterType.RequestBody);
                 packet = Execute<PacketBacktestResult>(request);
             }
             catch (Exception err)
@@ -292,6 +268,8 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// B64 Encoder 
         /// </summary>
+        /// <param name="plainText"></param>
+        /// <returns></returns>
         private string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);

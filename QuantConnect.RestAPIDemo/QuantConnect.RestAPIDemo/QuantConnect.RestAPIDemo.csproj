@@ -48,6 +48,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\QuantConnect.Common\QuantConnect.Common.csproj">
+      <Project>{2545c0b4-fabb-49c9-8dd1-9ad7ee23f86b}</Project>
+      <Name>QuantConnect.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\QuantConnect.RestAPI\QuantConnect.RestAPI.csproj">
       <Project>{70d2cc00-502f-49d2-afff-d65472de87d5}</Project>
       <Name>QuantConnect.RestAPI</Name>

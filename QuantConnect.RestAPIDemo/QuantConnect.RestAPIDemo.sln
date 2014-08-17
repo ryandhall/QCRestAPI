@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.RestAPIDemo", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.RestAPI", "..\QuantConnect.RestAPI\QuantConnect.RestAPI.csproj", "{70D2CC00-502F-49D2-AFFF-D65472DE87D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.Common", "..\QuantConnect.Common\QuantConnect.Common.csproj", "{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,18 @@ Global
 		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70D2CC00-502F-49D2-AFFF-D65472DE87D5}.Release|x64.ActiveCfg = Release|Any CPU
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Debug|x64.ActiveCfg = Debug|x64
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Debug|x64.Build.0 = Debug|x64
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Mono|Any CPU.ActiveCfg = Mono|Any CPU
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Mono|Any CPU.Build.0 = Mono|Any CPU
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Mono|x64.ActiveCfg = Mono|x64
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Mono|x64.Build.0 = Mono|x64
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Release|x64.ActiveCfg = Release|x64
+		{2545C0B4-FABB-49C9-8DD1-9AD7EE23F86B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -545,6 +545,11 @@
             Id of this data tick
             </summary>
         </member>
+        <member name="M:QuantConnect.Models.TradeBars.#ctor">
+            <summary>
+            TradeBars Default Initializer
+            </summary>
+        </member>
         <member name="M:QuantConnect.Models.TradeBars.#ctor(System.DateTime)">
             <summary>
             Default constructor for tradebars collection
@@ -968,8 +973,25 @@
         <member name="F:QuantConnect.ResultHandlerEndPoint.Console">
             Send the Results to the Local Console
         </member>
-        <member name="F:QuantConnect.ResultHandlerEndPoint.LiveCloud">
+        <member name="F:QuantConnect.ResultHandlerEndPoint.LiveTrading">
             Send Results to the Live Web Application
+        </member>
+        <member name="T:QuantConnect.SetupHandlerEndPoint">
+            <summary>
+            Setup Handler - Configure algorithm internal state for backtesting, console or live trading.
+            </summary>
+        </member>
+        <member name="F:QuantConnect.SetupHandlerEndPoint.Backtesting">
+            Configure algorithm+job for backtesting:
+        </member>
+        <member name="F:QuantConnect.SetupHandlerEndPoint.Console">
+            Configure algorithm+job for the console:
+        </member>
+        <member name="F:QuantConnect.SetupHandlerEndPoint.PaperTrading">
+            Paper trading algorithm+job internal state configuration
+        </member>
+        <member name="F:QuantConnect.SetupHandlerEndPoint.Tradier">
+            Tradier Setup Handler
         </member>
         <member name="T:QuantConnect.TransactionHandlerEndpoint">
             <summary>
@@ -982,14 +1004,14 @@
         <member name="F:QuantConnect.TransactionHandlerEndpoint.PaperTrading">
             Use Paper Trading Model to Process Transactions
         </member>
+        <member name="F:QuantConnect.TransactionHandlerEndpoint.Tradier">
+            Use Tradier to Process Transactions
+        </member>
         <member name="F:QuantConnect.TransactionHandlerEndpoint.InteractiveBrokers">
             Use Interactive Brokers to Process Transactions
         </member>
         <member name="F:QuantConnect.TransactionHandlerEndpoint.FXCM">
             Use FXCM to Process Transactions
-        </member>
-        <member name="F:QuantConnect.TransactionHandlerEndpoint.Tradier">
-            Use Tradier to Process Transactions
         </member>
         <member name="T:QuantConnect.TickType">
             <summary>
@@ -1632,18 +1654,24 @@
             Fill price information about the order
             </summary>
         </member>
+        <member name="F:QuantConnect.OrderEvent.FillQuantity">
+            <summary>
+            Number of shares of the order that was filled in this event.
+            </summary>
+        </member>
         <member name="F:QuantConnect.OrderEvent.Message">
             <summary>
             Any message from the exchange.
             </summary>
         </member>
-        <member name="M:QuantConnect.OrderEvent.#ctor(System.Int32,QuantConnect.OrderStatus,System.Decimal,System.String)">
+        <member name="M:QuantConnect.OrderEvent.#ctor(System.Int32,QuantConnect.OrderStatus,System.Decimal,System.Int32,System.String)">
             <summary>
             Order Constructor.
             </summary>
             <param name="id">Id of the parent order</param>
             <param name="status">Status of the order</param>
             <param name="fillPrice">Fill price information if applicable.</param>
+            <param name="fillQuantity">Fill quantity</param>
             <param name="message">Message from the exchange</param>
         </member>
         <member name="M:QuantConnect.OrderEvent.#ctor(QuantConnect.Order,System.String)">
@@ -1722,6 +1750,94 @@
             <summary>
             Value of the Order:
             </summary>
+        </member>
+        <member name="T:QuantConnect.Securities.EquityDataFilter">
+            <summary>
+            Packet by Packet Data Filtering Mechanism for Dynamically Detecting Bad Ticks.
+            </summary>
+        </member>
+        <member name="T:QuantConnect.Securities.SecurityDataFilter">
+            <summary>
+            Packet by Packet Data Filtering Mechanism for Dynamically Detecting Bad Ticks.
+            </summary>
+        </member>
+        <member name="T:QuantConnect.Securities.ISecurityDataFilter">
+            <summary>
+            Security Data Filter Interface
+            </summary>
+        </member>
+        <member name="M:QuantConnect.Securities.ISecurityDataFilter.Filter(QuantConnect.Securities.Security,QuantConnect.Models.BaseData)">
+            <summary>
+            Filter out a tick from this vehicle, with this new data:
+            </summary>
+            <param name="data">New data packet:</param>
+            <param name="vehicle">Vehicle of this filter.</param>
+        </member>
+        <member name="M:QuantConnect.Securities.SecurityDataFilter.#ctor">
+            <summary>
+            Initialize Data Filter Class:
+            </summary>
+        </member>
+        <member name="M:QuantConnect.Securities.SecurityDataFilter.Filter(QuantConnect.Securities.Security,QuantConnect.Models.BaseData)">
+            <summary>
+            Filter the data: true - accept, false - fail.
+            </summary>
+            <param name="data">Data class</param>
+            <param name="vehicle">Security asset</param>
+        </member>
+        <member name="F:QuantConnect.Securities.EquityDataFilter._acceptableDeviations">
+            <summary>
+            Range of acceptable standard deviations from norm for last XXX datapoints:
+            </summary>
+        </member>
+        <member name="F:QuantConnect.Securities.EquityDataFilter._dataPointHistory">
+            <summary>
+            History we're looking at to determine the standard deviation.
+            </summary>
+        </member>
+        <member name="M:QuantConnect.Securities.EquityDataFilter.#ctor">
+            <summary>
+            Initialize Data Filter Class:
+            </summary>
+        </member>
+        <member name="M:QuantConnect.Securities.EquityDataFilter.Filter(QuantConnect.Securities.Security,QuantConnect.Models.BaseData)">
+            <summary>
+            Equity filter the data: true - accept, false - fail.
+            </summary>
+            <param name="data">Data class</param>
+            <param name="vehicle">Security asset</param>
+        </member>
+        <member name="M:QuantConnect.Securities.EquityDataFilter.OnlineStandardDeviation(System.Double)">
+            <summary>
+            Update the online standard deviation formula
+            </summary>
+            <param name="value">new data.</param>
+            <returns>decimal standard deviation</returns>
+        </member>
+        <member name="M:QuantConnect.Securities.EquityDataFilter.OnlineVariance(System.Double)">
+            <summary>
+            Online variance 
+             http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:QuantConnect.Securities.ForexDataFilter">
+            <summary>
+            Packet by Packet Data Filtering Mechanism for Dynamically Detecting Bad Ticks.
+            </summary>
+        </member>
+        <member name="M:QuantConnect.Securities.ForexDataFilter.#ctor">
+            <summary>
+            Initialize Data Filter Class:
+            </summary>
+        </member>
+        <member name="M:QuantConnect.Securities.ForexDataFilter.Filter(QuantConnect.Securities.Security,QuantConnect.Models.BaseData)">
+            <summary>
+            Equity filter the data: true - accept, false - fail.
+            </summary>
+            <param name="data">Data class</param>
+            <param name="vehicle">Security asset</param>
         </member>
         <member name="T:QuantConnect.Securities.SecurityTransactionModel">
             <summary>
@@ -1845,6 +1961,12 @@
             <param name="data">New Data packet:</param>
             <param name="frontier">time frontier / where we are in time.</param>
         </member>
+        <member name="M:QuantConnect.Securities.Security.SetLeverage(System.Decimal)">
+            <summary>
+            Update the leverage parameter:
+            </summary>
+            <param name="leverage">Leverage for this asset:</param>
+        </member>
         <member name="P:QuantConnect.Securities.Security.Symbol">
             <summary>
             Public Symbol Property: Code for the asset:
@@ -1888,6 +2010,11 @@
         <member name="P:QuantConnect.Securities.Security.Model">
             <summary>
             Security Transaction Model Storage
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.Security.DataFilter">
+            <summary>
+            Customizable Data Filter to filter outlier ticks:
             </summary>
         </member>
         <member name="P:QuantConnect.Securities.Security.HoldStock">
@@ -2228,19 +2355,34 @@
             Public Holdings Property for the symbol of the underlying asset:
             </summary>
         </member>
-        <member name="P:QuantConnect.Securities.SecurityHolding.HoldingValue">
+        <member name="P:QuantConnect.Securities.SecurityHolding.HoldingsCost">
             <summary>
-            Return the value of the companies total holdings.
+            Return the acquisition cost of the companies total holdings.
             </summary>
         </member>
-        <member name="P:QuantConnect.Securities.SecurityHolding.AbsoluteHoldings">
+        <member name="P:QuantConnect.Securities.SecurityHolding.AbsoluteHoldingsCost">
             <summary>
-            Absolute of the Holdings:
+            Absolute of the Holdings: Unlevered
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.SecurityHolding.HoldingsValue">
+            <summary>
+            Market value of our holdings
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.SecurityHolding.AbsoluteHoldingsValue">
+            <summary>
+            Absolute of the market value of our holdings.
             </summary>
         </member>
         <member name="P:QuantConnect.Securities.SecurityHolding.HoldStock">
             <summary>
             If we have stock, return boolean true.
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.SecurityHolding.Invested">
+            <summary>
+            Alias of Hold Stock
             </summary>
         </member>
         <member name="P:QuantConnect.Securities.SecurityHolding.TotalSaleVolume">
@@ -2735,6 +2877,13 @@
             Calculate the new average price (if buying), and new quantity/profit if selling.
             </summary>
         </member>
+        <member name="M:QuantConnect.Securities.SecurityPortfolioManager.ScanForMarginCall">
+            <summary>
+            Scan the portfolio and the updated data for a potential margin call situation. 
+            If there is a margin call, place the order, process it and 
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QuantConnect.Securities.SecurityPortfolioManager.AddTransactionRecord(System.DateTime,System.Decimal)">
             <summary>
             Bit of a hack -- but using datetime as dictionary key is dangerous as you can process multiple orders within a second.
@@ -2770,14 +2919,14 @@
             for successful Security.
             </summary>
         </member>
-        <member name="P:QuantConnect.Securities.SecurityPortfolioManager.FreeCash">
-            <summary>
-            Get the free cash: cash that is not already allocated to assets/portfolio holdings.
-            </summary>
-        </member>
-        <member name="P:QuantConnect.Securities.SecurityPortfolioManager.TotalAbsoluteHoldings">
+        <member name="P:QuantConnect.Securities.SecurityPortfolioManager.TotalUnleveredAbsoluteHoldingsCost">
             <summary>
             Sum the individual asset holdings
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.SecurityPortfolioManager.TotalHoldingsValue">
+            <summary>
+            Holdings Market Value Sum
             </summary>
         </member>
         <member name="P:QuantConnect.Securities.SecurityPortfolioManager.HoldStock">
@@ -2832,26 +2981,10 @@
             Algorithm Transactions Manager - Recording Transactions
             </summary>
         </member>
-        <member name="F:QuantConnect.Securities.SecurityTransactionManager.OrderQueue">
-            <summary>
-            Processing Line for Orders Not Sent To Transaction Handler:
-            </summary>
-        </member>
-        <member name="F:QuantConnect.Securities.SecurityTransactionManager.TransactionRecord">
-            <summary>
-            Trade record of profits and losses for each trade statistics calculations
-            </summary>
-        </member>
         <member name="M:QuantConnect.Securities.SecurityTransactionManager.#ctor(QuantConnect.Securities.SecurityManager)">
             <summary>
             Initialise the Algorithm Transaction Class
             </summary>
-        </member>
-        <member name="M:QuantConnect.Securities.SecurityTransactionManager.SetOrderCache(System.Collections.Concurrent.ConcurrentDictionary{System.Int32,QuantConnect.Order})">
-            <summary>
-            Set the order cache, 
-            </summary>
-            <param name="orders">New orders cache</param>
         </member>
         <member name="M:QuantConnect.Securities.SecurityTransactionManager.AddOrder(QuantConnect.Order)">
             <summary>
@@ -2866,28 +2999,11 @@
             <param name="portfolio"></param>
             <returns>id if the order we modified.</returns>
         </member>
-        <member name="M:QuantConnect.Securities.SecurityTransactionManager.ProcessOrderEvents(System.Collections.Concurrent.ConcurrentQueue{QuantConnect.OrderEvent},QuantConnect.Securities.SecurityPortfolioManager,System.Int32,System.Boolean)">
-            <summary>
-            Scan through all the order events and update the user's portfolio
-            </summary>
-            <returns>.</returns>
-        </member>
         <member name="M:QuantConnect.Securities.SecurityTransactionManager.RemoveOrder(System.Int32)">
             <summary>
             Remove this order from outstanding queue: its been filled or cancelled.
             </summary>
             <param name="orderId">Specific order id to remove</param>
-        </member>
-        <member name="M:QuantConnect.Securities.SecurityTransactionManager.ValidateOrder(QuantConnect.Order,QuantConnect.Securities.SecurityPortfolioManager,System.DateTime,System.Int32,System.Decimal)">
-            <summary>
-            Validate the transOrderDirection is a sensible choice, factoring in basic limits.
-            </summary>
-            <param name="order">Order to Validate</param>
-            <param name="portfolio">Security portfolio object we're working on.</param>
-            <param name="time">Current actual time</param>
-            <param name="maxOrders">Maximum orders per day/period before rejecting.</param>
-            <param name="price">Current actual price of security</param>
-            <returns>If negative its an error, or if 0 no problems.</returns>
         </member>
         <member name="M:QuantConnect.Securities.SecurityTransactionManager.GetSufficientCapitalForOrder(QuantConnect.Securities.SecurityPortfolioManager,QuantConnect.Order)">
             <summary>
@@ -2904,18 +3020,26 @@
             <param name="order">Order to check</param>
             <returns>decimal cash required to purchase order</returns>
         </member>
-        <member name="M:QuantConnect.Securities.SecurityTransactionManager.GetExpectedFinalHoldings(QuantConnect.Securities.SecurityPortfolioManager,QuantConnect.Order)">
-            <summary>
-            Given this portfolio and order, what would the final portfolio holdings be if it were filled.
-            </summary>
-            <param name="portfolio">Portfolio we're running</param>
-            <param name="order">Order requested to process </param>
-            <returns>decimal final holdings </returns>
-        </member>
         <member name="P:QuantConnect.Securities.SecurityTransactionManager.Orders">
             <summary>
             Holding All Orders: Clone of the TransactionHandler.Orders
             -> Read only.
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.SecurityTransactionManager.OrderQueue">
+            <summary>
+            Temporary storage while waiting for orders to process.
+            Processing Line for Orders Not Sent To Transaction Handler:
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.SecurityTransactionManager.OrderEvents">
+            <summary>
+            New event from a partially-processed/pending order
+            </summary>
+        </member>
+        <member name="P:QuantConnect.Securities.SecurityTransactionManager.TransactionRecord">
+            <summary>
+            Trade record of profits and losses for each trade statistics calculations
             </summary>
         </member>
         <member name="P:QuantConnect.Securities.SecurityTransactionManager.MinimumOrderSize">
@@ -3016,6 +3140,12 @@
             <param name="equityOverTime">Array of portfolio value over time.</param>
             <param name="rounding">Round the drawdown statistics </param>
             <returns>Draw down percentage over period.</returns>
+        </member>
+        <member name="M:QuantConnect.Statistics.CompoundingAnnualPerformance(System.Decimal,System.Decimal,System.Decimal)">
+            <summary>
+            Get the annual compounded returns:
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:QuantConnect.Statistics.AnnualPerformance(System.Collections.Generic.List{System.Double},System.Double)">
             <summary>

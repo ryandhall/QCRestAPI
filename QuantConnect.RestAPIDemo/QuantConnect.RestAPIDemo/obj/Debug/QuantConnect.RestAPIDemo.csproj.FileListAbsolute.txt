@@ -18,6 +18,3 @@ C:\Server\www\QCo\QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo\bin\Debug\Qu
 C:\Server\www\QCo\QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo\bin\Debug\QuantConnect.Logging.pdb
 C:\Server\www\QCo\QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo\bin\Debug\QuantConnect.Logging.xml
 C:\Server\www\QCo\QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo\bin\Debug\MathNet.Numerics.xml
-C:\Server\www\QCRestAPI\QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo\bin\Debug\ConsoleApplication1.exe.config
-C:\Server\www\QCRestAPI\QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo\obj\Debug\ConsoleApplication1.exe
-C:\Server\www\QCRestAPI\QuantConnect.RestAPIDemo\QuantConnect.RestAPIDemo\obj\Debug\ConsoleApplication1.pdb
