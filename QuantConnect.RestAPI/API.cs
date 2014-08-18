@@ -84,13 +84,25 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Test these authentication details against the server:
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
-        public void Authenticate(string email, string password)
+        /// <param name="email">User email from quantconnect account</param>
+        /// <param name="password">Quantconnect user password</param>
+        public bool Authenticate(string email, string password)
         {
+            bool loggedIn = false;
+
             _email = email;
             _password = password;
             _accessToken = Base64Encode(email + ":" + password);
+
+            var request = new RestRequest("projects/read", Method.POST);
+            var response = Execute<PacketProject>(request);
+
+            if (response.Errors == null || response.Errors.Count == 0)
+            {
+                return true;
+            }
+
+            return loggedIn;
         }
 
         /// <summary>
