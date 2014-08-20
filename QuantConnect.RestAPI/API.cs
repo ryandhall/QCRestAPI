@@ -16,6 +16,10 @@ using RestSharp;
 using RestSharp.Authenticators;
 using System.Threading;
 using Newtonsoft.Json;
+using System.Net;
+using ICSharpCode;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace QuantConnect.RestAPI
 {
@@ -40,6 +44,32 @@ namespace QuantConnect.RestAPI
         private DateTime _previousRequest = new DateTime();
         /// Set the rate limit maximum:
         private TimeSpan _rateLimit = TimeSpan.FromSeconds(3);
+        /// GitHub SHA for QCAlgorithm:
+        private string _gitHubHash = "";
+        /// Location of saved hash file:
+        private string _hashFile = "hash.dat";
+
+        /// <summary>
+        /// Public property for the GitHub QCAlgorithm Hash.
+        /// </summary>
+        public string QCAlgorithmSHA
+        {
+            get
+            {
+                if (_gitHubHash == "")
+                {
+                    if (System.IO.File.Exists(_hashFile))
+                    {
+                        _gitHubHash = System.IO.File.ReadAllText(_hashFile);
+                    }
+                }
+                return _gitHubHash;
+            }
+            set
+            {
+                _gitHubHash = value;
+            }
+        }
 
 
         /******************************************************** 
@@ -104,6 +134,131 @@ namespace QuantConnect.RestAPI
 
             return loggedIn;
         }
+
+
+        /// <summary>
+        /// Check if the current version of QCAlgorithm is obsolete.
+        /// </summary>
+        /// <param name="hashId">HashId of last commit</param>
+        /// <returns>bool true/false obsolete</returns>
+        public bool CheckQCAlgorithmVersion(string hashId = "")
+        {
+            bool valid = false;
+            try
+            {
+                if (hashId == "")
+                {
+                    hashId = QCAlgorithmSHA;
+                }
+
+                string latestSHA = GetLatestQCAlgorithmSHA();
+
+                if (latestSHA == hashId)
+                {
+                    valid = true;
+                }
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("QuantConnect.CheckQCAlgorithmVersion(): " + err.Message);
+            }
+            return valid;
+        }
+
+
+        /// <summary>
+        /// Get the latest QCAlgorithm SHA Hash from GitHub.
+        /// </summary>
+        /// <returns></returns>
+        public string GetLatestQCAlgorithmSHA()
+        {
+            string sha = "";
+            try
+            {
+                var client = new RestClient(@"https://api.github.com/");
+                var request = new RestRequest("repos/QuantConnect/QCAlgorithm/commits", Method.GET);
+                request.AddHeader("Accept", "application/vnd.github.v3+json");
+                var response = client.Execute(request);
+                var decoded = JsonConvert.DeserializeObject<List<PacketGitHubCommit>>(response.Content);
+                sha = decoded[0].SHA;
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("QuantConnect.GetLatestQCAlgorithmSHA(): " + err.Message);
+            }
+            return sha;
+        }
+
+
+        /// <summary>
+        /// Download and unzip the latest QCAlgorithm to a local folder:
+        /// </summary>
+        /// <param name="destination"></param>
+        public void DownloadQCAlgorithm(string directory, bool async = false, DownloadProgressChangedEventHandler callbackProgress = null, System.ComponentModel.AsyncCompletedEventHandler callbackCompleted = null)
+        {
+            try
+            {
+                if (!System.IO.Directory.Exists(directory))
+                {
+                    System.IO.Directory.CreateDirectory(directory);
+                }
+
+                string file = directory + @"\" + "QCAlgorithm.zip";
+
+                using (var client = new WebClient())
+                {
+                    if (async)
+                    {
+                        client.DownloadFileAsync(new Uri(@"https://github.com/QuantConnect/QCAlgorithm/archive/master.zip"), file);
+                        if (callbackProgress != null) client.DownloadProgressChanged += callbackProgress;
+                        if (callbackCompleted != null) client.DownloadFileCompleted += callbackCompleted;
+                    }
+                    else
+                    {
+                        client.DownloadFile(@"https://github.com/QuantConnect/QCAlgorithm/archive/master.zip", file);
+                    }
+                }
+
+                ZipFile zf = null;
+                try {
+                    System.IO.FileStream fs = System.IO.File.OpenRead(file);
+                    zf = new ZipFile(fs);
+                    
+                    foreach (ZipEntry zipEntry in zf) {
+                        if (!zipEntry.IsFile) {
+                            continue;           // Ignore directories
+                        }
+                        String entryFileName = zipEntry.Name;
+                        byte[] buffer = new byte[4096];
+                        System.IO.Stream zipStream = zf.GetInputStream(zipEntry);
+
+                        // Manipulate the output filename here as desired.
+                        String fullZipToPath = System.IO.Path.Combine(directory, entryFileName);
+                        string directoryName = System.IO.Path.GetDirectoryName(fullZipToPath);
+                        if (directoryName.Length > 0)
+                            System.IO.Directory.CreateDirectory(directoryName);
+
+                        using (System.IO.FileStream streamWriter = System.IO.File.Create(fullZipToPath))
+                        {
+                            StreamUtils.Copy(zipStream, streamWriter, buffer);
+                        }
+                    }
+                } finally {
+                    if (zf != null) {
+                        zf.IsStreamOwner = true;
+                        zf.Close();
+                    }
+                }
+
+                //Save the new Hash ID to the disk:
+                System.IO.File.WriteAllText(_hashFile, GetLatestQCAlgorithmSHA());
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("QuantConnect.DownloadQCAlgorithm(): " + err.Message);
+            }
+        }
+
 
         /// <summary>
         /// Create a new project in your QC account.
