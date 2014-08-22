@@ -95,7 +95,7 @@ namespace QuantConnect.RestAPI
             client.AddDefaultHeader("Authorization", "Basic " + _accessToken);
 
             //Wait for the API rate limiting
-            while (DateTime.Now < (_previousRequest + _rateLimit)) Thread.Sleep(10);
+            while (DateTime.Now < (_previousRequest + _rateLimit)) Thread.Sleep(50);
             _previousRequest = DateTime.Now;
 
             //Send the request:
@@ -160,7 +160,7 @@ namespace QuantConnect.RestAPI
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.CheckQCAlgorithmVersion(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.CheckQCAlgorithmVersion(): " + err.Message);
             }
             return valid;
         }
@@ -184,7 +184,7 @@ namespace QuantConnect.RestAPI
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.GetLatestQCAlgorithmSHA(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.GetLatestQCAlgorithmSHA(): " + err.Message);
             }
             return sha;
         }
@@ -255,7 +255,7 @@ namespace QuantConnect.RestAPI
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.DownloadQCAlgorithm(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.DownloadQCAlgorithm(): " + err.Message);
             }
         }
 
@@ -265,62 +265,58 @@ namespace QuantConnect.RestAPI
         /// </summary>
         /// <param name="projectName">Name of the new project</param>
         /// <returns>Project Id.</returns>
-        public int ProjectCreate(string name)
+        public PacketCreateProject ProjectCreate(string name)
         {
-            int id = -1;
+            var response = new PacketCreateProject();
             try 
             {
                 var request = new RestRequest("projects/create", Method.POST);
                 request.AddParameter("application/json", JsonConvert.SerializeObject(new { projectName = name }), ParameterType.RequestBody);
-                var response = Execute<PacketCreateProject>(request);
-                id = response.ProjectId;
+                response = Execute<PacketCreateProject>(request);
             }   
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.ProjectCreate(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.ProjectCreate(): " + err.Message);
             }
-
-            return id;
+            return response;
         }
 
 
         /// <summary>
         /// Update a project with a list of C# files:
         /// </summary>
-        public bool ProjectUpdate(int id, List<File> filesData)
+        public PacketBase ProjectUpdate(int id, List<File> filesData)
         {
-            bool success = false;
+            var response = new PacketBase();
             try
             {
                 var request = new RestRequest("projects/update", Method.POST);
                 request.AddParameter("application/json", JsonConvert.SerializeObject(new { projectId = id, files = filesData }), ParameterType.RequestBody);
-                var response = Execute<PacketBase>(request);
-                success = response.Success;
+                response = Execute<PacketBase>(request);
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.ProjectCreate(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.ProjectCreate(): " + err.Message);
             }
 
-            return success;
+            return response;
         }
 
         /// <summary>
         /// Return a list of QuantConnect Projects
         /// </summary>
         /// <returns></returns>
-        public List<Project> ProjectList()
+        public PacketProject ProjectList()
         {
-            List<Project> projects = new List<Project>();
+            var projects = new PacketProject();
             try
             {
                 var request = new RestRequest("projects/read", Method.POST);
-                var response = Execute<PacketProject>(request);
-                projects = response.Projects;
+                projects = Execute<PacketProject>(request);
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.RestAPI.Projects(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.ProjectList(): " + err.Message);
             }
             return projects;
         }
@@ -329,9 +325,9 @@ namespace QuantConnect.RestAPI
         /// <summary>
         /// Get a list of project files in this project
         /// </summary>
-        public List<File> ProjectFiles(int id)
+        public PacketProjectFiles ProjectFiles(int id)
         {
-            List<File> files = new List<File>();
+            var response = new PacketProjectFiles();
 
             try
             {
@@ -339,36 +335,34 @@ namespace QuantConnect.RestAPI
                 request.RequestFormat = DataFormat.Json;
                 request.AddParameter("application/json", JsonConvert.SerializeObject(new { projectId = id }), ParameterType.RequestBody);
 
-                var response = Execute<PacketProjectFiles>(request);
-                files = response.Files;
+                response = Execute<PacketProjectFiles>(request);
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.API.ProjectFiles(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.ProjectFiles(): " + err.Message);
             }
 
-            return files;
+            return response;
         }
 
 
         /// <summary>
         /// Delete a project by id:
         /// </summary>
-        public bool ProjectDelete(int id)
+        public PacketBase ProjectDelete(int id)
         {
-            bool success = false;
+            var response = new PacketBase();
             try
             {
                 var request = new RestRequest("projects/delete", Method.POST);
                 request.AddParameter("application/json", JsonConvert.SerializeObject(new { projectId = id }), ParameterType.RequestBody);
-                var response = Execute<PacketBase>(request);
-                success = response.Success;
+                response = Execute<PacketBase>(request);
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.RestAPI.Projects(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.ProjectDelete(): " + err.Message);
             }
-            return success;
+            return response;
         }
 
 
@@ -386,7 +380,7 @@ namespace QuantConnect.RestAPI
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.Compile(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.Compile(): " + err.Message);
             }
             return packet;
         }
@@ -406,7 +400,7 @@ namespace QuantConnect.RestAPI
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.Compile(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.Backtest(): " + err.Message);
             }
             return packet;
         }
@@ -426,7 +420,7 @@ namespace QuantConnect.RestAPI
             }
             catch (Exception err)
             {
-                Console.WriteLine("QuantConnect.Compile(): " + err.Message);
+                Console.WriteLine("QuantConnect.RestAPI.BacktestResults(): " + err.Message);
             }
             return packet;
         }
