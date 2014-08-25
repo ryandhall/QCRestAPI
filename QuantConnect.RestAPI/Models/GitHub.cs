@@ -16,12 +16,6 @@ using Newtonsoft.Json.Serialization;
 
 namespace QuantConnect.RestAPI.Models
 {
-    public class PacketGitHubCommitContainer
-    {
-        List<PacketGitHubCommit> Commits;
-    }
-
-
     /// <summary>
     /// Github Packet:
     /// </summary>

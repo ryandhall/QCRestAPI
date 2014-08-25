@@ -36,7 +36,6 @@ namespace QuantConnect.RestAPIDemo
                 api.DownloadQCAlgorithm("QCAlgorithm");
             }
 
-
             Console.WriteLine("==========================================");
             Console.WriteLine("Test 1: Create Project: ");
             PacketCreateProject projectCreated = api.ProjectCreate("New Test Project");
@@ -88,6 +87,22 @@ namespace QuantConnect.RestAPIDemo
             foreach (Chart chart in readResult.Results.Charts.Values)
             {
                 Console.WriteLine("Result Chart Name: " + chart.Name);
+            }
+
+            Console.WriteLine("==========================================");
+            Console.WriteLine("Test 8: Reading Backtest List:");
+            PacketBacktestList backtestList = api.BacktestList(newProjectId);
+            foreach (var summary in backtestList.Summary)
+            {
+                Console.WriteLine("Backtest: " + summary.BacktestId + " Requested: " + summary.Requested.ToShortDateString());
+
+                Console.WriteLine("==========================================");
+                Console.WriteLine("Test 9: Delete Backtest:");
+                PacketBase deleteBacktest = api.BacktestDelete(summary.BacktestId);
+                if (deleteBacktest.Success)
+                {
+                    Console.WriteLine("Deleted: " + summary.BacktestId);
+                }
             }
 
             Console.WriteLine("==========================================");

@@ -40,10 +40,6 @@ namespace QuantConnect.RestAPI
         private string _password = "";
         /// Encoded token username password:
         private string _accessToken = "";
-        /// Manage Rate Limiting:
-        private DateTime _previousRequest = new DateTime();
-        /// Set the rate limit maximum:
-        private TimeSpan _rateLimit = TimeSpan.FromSeconds(3);
         /// GitHub SHA for QCAlgorithm:
         private string _gitHubHash = "";
         /// Location of saved hash file:
@@ -93,10 +89,6 @@ namespace QuantConnect.RestAPI
             client.AddDefaultHeader("Accept", "application/json");
             client.AddDefaultHeader("Content-Type", "application/json");
             client.AddDefaultHeader("Authorization", "Basic " + _accessToken);
-
-            //Wait for the API rate limiting
-            while (DateTime.Now < (_previousRequest + _rateLimit)) Thread.Sleep(50);
-            _previousRequest = DateTime.Now;
 
             //Send the request:
             var raw = client.Execute(request);
@@ -421,6 +413,48 @@ namespace QuantConnect.RestAPI
             catch (Exception err)
             {
                 Console.WriteLine("QuantConnect.RestAPI.BacktestResults(): " + err.Message);
+            }
+            return packet;
+        }
+
+
+        /// <summary>
+        /// Delete the given backtest Id
+        /// </summary>
+        /// <param name="backtestId">Id we want to delete</param>
+        /// <returns>Packet success, fail or errors</returns>
+        public PacketBase BacktestDelete(string backtestId)
+        {
+            PacketBase packet = new PacketBase();
+            try
+            {
+                var request = new RestRequest("backtests/delete", Method.POST);
+                request.AddParameter("application/json", JsonConvert.SerializeObject(new { backtestId = backtestId }), ParameterType.RequestBody);
+                packet = Execute<PacketBase>(request);
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("QuantConnect.RestAPI.BacktestDelete(): " + err.Message);
+            }
+            return packet;
+        }
+
+
+        /// <summary>
+        /// Get a list of backtest results for this project:
+        /// </summary>
+        public PacketBacktestList BacktestList(int projectId)
+        {
+            var packet = new PacketBacktestList();
+            try
+            {
+                var request = new RestRequest("backtests/list", Method.POST);
+                request.AddParameter("application/json", JsonConvert.SerializeObject(new { projectId = projectId }), ParameterType.RequestBody);
+                packet = Execute<PacketBacktestList>(request);
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("QuantConnect.RestAPI.BacktestList(): " + err.Message);
             }
             return packet;
         }

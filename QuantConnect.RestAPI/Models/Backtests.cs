@@ -67,4 +67,44 @@ namespace QuantConnect.RestAPI.Models
         public BacktestResult() 
         { }
     }
+
+
+    /// <summary>
+    /// List of Backtest Results for this project:
+    /// </summary>
+    public class PacketBacktestList : PacketBase
+    {
+        [JsonProperty(PropertyName = "results")]
+        public List<BacktestSummary> Summary;
+    }
+
+    /// <summary>
+    /// Summary of a Backtest (no result data):
+    /// </summary>
+    public class BacktestSummary
+    {
+        [JsonProperty(PropertyName = "backtestId")]
+        public string BacktestId;
+
+        [JsonProperty(PropertyName = "name")]
+        public string Name;
+
+        [JsonProperty(PropertyName = "progress")]
+        public double Progress;
+
+        [JsonProperty(PropertyName = "processingTime")]
+        public double ProcessingTime;
+
+        [JsonProperty(PropertyName = "requested")]
+        public DateTime Requested;
+
+        [JsonProperty(PropertyName = "startDate")]
+        public DateTime StartDate;
+
+        [JsonProperty(PropertyName = "endDate")]
+        public DateTime EndDate;
+
+        [JsonProperty(PropertyName = "sparkline")]
+        public string SparkLine;
+    }
 }
