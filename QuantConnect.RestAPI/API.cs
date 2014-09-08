@@ -76,7 +76,10 @@ namespace QuantConnect.RestAPI
         /// </summary>
         public API(string email, string password)
         {
-            Authenticate(email, password);
+            _email = email;
+            _password = password;
+            _accessToken = Base64Encode(email + ":" + password);
+            //Authenticate(email, password);
         }
 
 
@@ -211,36 +214,8 @@ namespace QuantConnect.RestAPI
                     }
                 }
 
-                ZipFile zf = null;
-                try {
-                    System.IO.FileStream fs = System.IO.File.OpenRead(file);
-                    zf = new ZipFile(fs);
-                    
-                    foreach (ZipEntry zipEntry in zf) {
-                        if (!zipEntry.IsFile) {
-                            continue;           // Ignore directories
-                        }
-                        String entryFileName = zipEntry.Name;
-                        byte[] buffer = new byte[4096];
-                        System.IO.Stream zipStream = zf.GetInputStream(zipEntry);
-
-                        // Manipulate the output filename here as desired.
-                        String fullZipToPath = System.IO.Path.Combine(directory, entryFileName);
-                        string directoryName = System.IO.Path.GetDirectoryName(fullZipToPath);
-                        if (directoryName.Length > 0)
-                            System.IO.Directory.CreateDirectory(directoryName);
-
-                        using (System.IO.FileStream streamWriter = System.IO.File.Create(fullZipToPath))
-                        {
-                            StreamUtils.Copy(zipStream, streamWriter, buffer);
-                        }
-                    }
-                } finally {
-                    if (zf != null) {
-                        zf.IsStreamOwner = true;
-                        zf.Close();
-                    }
-                }
+                //Extract the zip:
+                WriteZip(directory, file);
 
                 //Save the new Hash ID to the disk:
                 System.IO.File.WriteAllText(_hashFile, GetLatestQCAlgorithmSHA());
@@ -248,6 +223,50 @@ namespace QuantConnect.RestAPI
             catch (Exception err)
             {
                 Console.WriteLine("QuantConnect.RestAPI.DownloadQCAlgorithm(): " + err.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Write a zip to directory
+        /// </summary>
+        public void WriteZip(string directory, string file)
+        {
+            ZipFile zf = null;
+            try
+            {
+                System.IO.FileStream fs = System.IO.File.OpenRead(file);
+                zf = new ZipFile(fs);
+
+                foreach (ZipEntry zipEntry in zf)
+                {
+                    if (!zipEntry.IsFile)
+                    {
+                        continue;           // Ignore directories
+                    }
+                    String entryFileName = zipEntry.Name;
+                    byte[] buffer = new byte[4096];
+                    System.IO.Stream zipStream = zf.GetInputStream(zipEntry);
+
+                    // Manipulate the output filename here as desired.
+                    String fullZipToPath = System.IO.Path.Combine(directory, entryFileName);
+                    string directoryName = System.IO.Path.GetDirectoryName(fullZipToPath);
+                    if (directoryName.Length > 0)
+                        System.IO.Directory.CreateDirectory(directoryName);
+
+                    using (System.IO.FileStream streamWriter = System.IO.File.Create(fullZipToPath))
+                    {
+                        StreamUtils.Copy(zipStream, streamWriter, buffer);
+                    }
+                }
+            }
+            finally
+            {
+                if (zf != null)
+                {
+                    zf.IsStreamOwner = true;
+                    zf.Close();
+                }
             }
         }
 
